@@ -1,0 +1,4 @@
+environs==11.2.1
+pathlib==1.0.1
+PySIPio==1.8.0
+
