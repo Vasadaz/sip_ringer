@@ -17,13 +17,14 @@ async def call_out(called_number: str, account: SipAccount):
 
     await call_task
     await call.call_handler.hangup()
+    
     await account.unregister()
 
 def main():
     env = Env()
     env.read_env()
     sip_domain = env.str("SIP_DOMAIN")
-    sip_server_port = env.int("SIP_SERVER_PORT")
+    sip_port = env.int("SIP_PORT")
     sip_username = env.str("SIP_USERNAME")
     sip_password = env.str("SIP_PASSWORD")
     called_number = env.str("CALL_NUMBER")
