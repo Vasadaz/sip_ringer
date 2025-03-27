@@ -6,7 +6,7 @@ from environs import Env
 
 class Account(pj.Account):
   def onRegState(self, prm):
-      print("***OnRegState: " + prm.reason)
+      print('***OnRegState: ' + prm.reason)
 
 def pjsua2_test(
   username: str,
@@ -32,9 +32,9 @@ def pjsua2_test(
 
   account_cfg = pj.AccountConfig()
 
-  account_cfg.idUri = f"sip:{domain}"
-  account_cfg.regConfig.registrarUri = f"sip:{domain}"
-  cred = pj.AuthCredInfo("digest", "*", username, 1, password)
+  account_cfg.idUri = f'I-{username} <sip:{username}@{domain}>'
+  account_cfg.regConfig.registrarUri = f'sip:{username}@{domain}'
+  cred = pj.AuthCredInfo('digest', '*', username, 0, password)
   account_cfg.sipConfig.authCreds.append(cred)
 
   account = Account()
@@ -51,14 +51,14 @@ def pjsua2_test(
   del endpoint, account
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
   env = Env()
   env.read_env()
-  sip_domain = env.str("SIP_DOMAIN")
-  sip_port = env.int("SIP_PORT")
-  sip_username = env.str("SIP_USERNAME")
-  sip_password = env.str("SIP_PASSWORD")
-  called_number = env.str("CALL_NUMBER")
+  sip_domain = env.str('SIP_DOMAIN')
+  sip_port = env.int('SIP_PORT')
+  sip_username = env.str('SIP_USERNAME')
+  sip_password = env.str('SIP_PASSWORD')
+  called_number = env.str('CALL_NUMBER')
 
   pjsua2_test(
     username=sip_username,
