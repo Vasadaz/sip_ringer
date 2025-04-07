@@ -5,65 +5,59 @@ from environs import Env
 
 
 class Account(pj.Account):
-  def onRegState(self, prm):
-      print('***OnRegState: ' + prm.reason)
+    def onRegState(self, prm):
+        print('***OnRegState: ' + prm.reason)
+
 
 def pjsua2_test(
-  username: str,
-  password: str,
-  domain: str,
-  port: int,
+    username: str,
+    password: str,
+    domain: str,
+    port: int,
 ):
-  endpoint_cfg = pj.EpConfig()
-  endpoint_cfg.uaConfig.threadCount = 0
-  endpoint_cfg.logConfig.level = 5
-  endpoint_cfg.uaConfig.maxCalls = 4
+    ep_cfg = pj.EpConfig()
+    ep_cfg.uaConfig.threadCount = 0
+    ep_cfg.logConfig.level = 5
+    ep_cfg.uaConfig.maxCalls = 4
 
+    ep = pj.Endpoint()
+    ep.libCreate()
+    ep.libInit(ep_cfg)
 
-  endpoint = pj.Endpoint()
-  endpoint.libCreate()
-  endpoint.libInit(endpoint_cfg)
+    t_cfg = pj.TransportConfig()
+    t_cfg.port = port
+    ep.transportCreate(pj.PJSIP_TRANSPORT_UDP, t_cfg)
 
-  sip_transport_cfg = pj.TransportConfig()
-  sip_transport_cfg.port = port
-  endpoint.transportCreate(pj.PJSIP_TRANSPORT_UDP, sip_transport_cfg)
+    ep.libStart()
 
-  endpoint.libStart()
+    acc_cfg = pj.AccountConfig()
+    acc_cfg.idUri = f'I-{username} <sip:{username}@{domain}>'
+    acc_cfg.regConfig.registrarUri = f'sip:{domain}'
+    cred = pj.AuthCredInfo('digest', '*', username, 0, password)
+    acc_cfg.sipConfig.authCreds.append(cred)
 
-  account_cfg = pj.AccountConfig()
+    acc = Account()
+    acc.create(acc_cfg)
 
-  account_cfg.idUri = f'I-{username} <sip:{username}@{domain}>'
-  account_cfg.regConfig.registrarUri = f'sip:{username}@{domain}'
-  cred = pj.AuthCredInfo('digest', '*', username, 0, password)
-  account_cfg.sipConfig.authCreds.append(cred)
+    time.sleep(100)
 
-  account = Account()
-  print('*' * 500)
-
-  account.create(account_cfg)
-
-  print('*' * 500)
-
-  time.sleep(10)
-
-  print('*' * 500)
-  endpoint.libDestroy()
-  del endpoint, account
+    ep.libDestroy()
+    del ep, acc
 
 
 if __name__ == '__main__':
-  env = Env()
-  env.read_env()
-  sip_domain = env.str('SIP_DOMAIN')
-  sip_port = env.int('SIP_PORT')
-  sip_username = env.str('SIP_USERNAME')
-  sip_password = env.str('SIP_PASSWORD')
-  called_number = env.str('CALL_NUMBER')
+    env = Env()
+    env.read_env()
+    sip_domain = env.str('SIP_DOMAIN')
+    sip_port = env.int('SIP_PORT')
+    sip_username = env.str('SIP_USERNAME')
+    sip_password = env.str('SIP_PASSWORD')
+    called_number = env.str('CALL_NUMBER')
 
-  pjsua2_test(
-    username=sip_username,
-    password=sip_password,
-    domain=sip_domain,
-    port=sip_port,
-  )
+    pjsua2_test(
+        username=sip_username,
+        password=sip_password,
+        domain=sip_domain,
+        port=sip_port,
+    )
 
