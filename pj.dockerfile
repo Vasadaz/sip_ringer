@@ -72,12 +72,3 @@ EXPOSE 5060/udp
 
 CMD ["/bin/bash"]
 
-# docker build -t pj -f pj.dockerfile .
-# docker run -it --rm --name pj_c --network net -p 5060:5060/udp pj
-# docker run --name=asterisk_test --hostname=asterisk_new --net=MacVlanNetwork -- ip=172.16.3.196 pj
-
-# docker build -t pjsip -f dockerfiles/py.dockerfile.debian . && docker run -it --rm --network net --add-host=host.docker.internal:host-gateway pjsip
-# docker build -t pjsip -f dockerfiles/py.dockerfile.debian
-# docker run -it --rm --network net --add-host=host.docker.internal:host-gateway pjsip
-# docker run -it --rm --network net --add-host=host.docker.internal:host-gateway -v ${pwd}:/home/THE-PJPROJECT pjsip
-
