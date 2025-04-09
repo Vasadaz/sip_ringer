@@ -37,6 +37,7 @@ RUN apt-get install -y \
     libopencore-amrnb-dev \
     libvo-amrwbenc-dev \
     subversion \
+    ffmpeg \
     swig
 
 
